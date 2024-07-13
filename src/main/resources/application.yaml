@@ -1,0 +1,68 @@
+keycloak:
+  server:
+      url: https://lfhardware-keycloak-app-u9db4.ondigitalocean.app
+
+spring:
+  session:
+    timeout: 10m
+  security:
+    oauth2:
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${keycloak.server.url}/realms/LFHardware
+            authorization-uri: ${keycloak.server.url}/realms/LFHardware/protocol/openid-connect/auth
+            token-uri: ${keycloak.server.url}/realms/LFHardware/protocol/openid-connect/token
+            jwk-set-uri: ${keycloak.server.url}/realms/LFHardware/protocol/openid-connect/certs
+        registration:
+          keycloak:
+            authorization-grant-type: authorization_code
+            client-id: lfhardware
+            client-secret: LfXcJosSNveczrTQ9Qcq2Vvnc1sKOYsM
+            client-name: LF Hardware Client
+            scope:
+              - profile
+              - email
+              - openid
+  cloud:
+    gateway:
+      #      default-filters:
+      #        - DedupeResponseHeader=Access-Control-Allow-Origin Access-Control-Allow-Credentials, RETAIN_UNIQUE
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+        #add-to-simple-url-handler-mapping: true
+
+      routes:
+        - id: oidc_logout_route
+          uri: http://localhost:8090/logout
+          predicates:
+              - Path=/logout
+          filters:
+              - RedirectTo=302,http://localhost:8090/test
+        - id: api
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/**
+          filters:
+            #            - RewritePath=/api/v1/(?<segment>.*), /$\{segment}
+            - TokenRelay=
+            - SaveSession
+        - id: angular
+          uri: http://localhost:4200
+          predicates:
+            - Path=/**
+          filters:
+            - RemoveRequestHeader=Cookie
+server:
+  port: 8090
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+        cloud:
+          gateway: DEBUG
