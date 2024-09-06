@@ -1,6 +1,6 @@
 keycloak:
   server:
-      url: https://lfhardware-keycloak-app-u9db4.ondigitalocean.app
+    url: http://localhost:8080
 
 spring:
   session:
@@ -18,7 +18,7 @@ spring:
           keycloak:
             authorization-grant-type: authorization_code
             client-id: lfhardware
-            client-secret: LfXcJosSNveczrTQ9Qcq2Vvnc1sKOYsM
+            client-secret: sjZNs8sUg71NllmslJGHz346X9RHUcFX
             client-name: LF Hardware Client
             scope:
               - profile
@@ -40,9 +40,9 @@ spring:
         - id: oidc_logout_route
           uri: http://localhost:8090/logout
           predicates:
-              - Path=/logout
+            - Path=/logout
           filters:
-              - RedirectTo=302,http://localhost:8090/test
+            - RedirectTo=302,http://localhost:8090/test
         - id: api
           uri: http://localhost:8081
           predicates:
@@ -57,8 +57,6 @@ spring:
             - Path=/**
           filters:
             - RemoveRequestHeader=Cookie
-  profiles:
-    active: dev
 server:
   port: 8090
 logging:
