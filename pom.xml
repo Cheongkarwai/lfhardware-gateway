@@ -42,6 +42,10 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
 <!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.keycloak/keycloak-spring-boot-starter &ndash;&gt;-->
 <!--        <dependency>-->
 <!--            <groupId>org.keycloak</groupId>-->
